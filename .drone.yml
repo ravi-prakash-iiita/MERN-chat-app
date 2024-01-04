@@ -1,0 +1,51 @@
+kind: pipeline
+type: ssh
+name: build
+
+server:
+  host: 
+  user: ubuntu
+  password:
+    from_secret: drone-runner-build-pwd
+
+trigger:
+  branch:
+    - main
+  event:
+    - push
+    - pull_request
+
+steps:
+  - name: configurations
+    depends_on: [clone]
+    environment:
+      ALTRUNIC_ECR_REPO:
+        from_secret: ecr_repo_arn
+      AWS_ACCESS_KEY_ID:
+        from_secret: aws_access_key
+      AWS_SECRET_ACCESS_KEY:
+        from_secret: aws_secret_key
+      VENTURENOX_DRONE_TOKEN:
+        from_secret: venturenox_drone_token
+    commands:
+      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+      - aws configure set default.region us-east-1
+      - aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin $ALTRUNIC_ECR_REPO
+      - cd ../../../../
+      - configjson=$(sudo cat root/.docker/config.json)
+      - export DRONE_SERVER=http://drone.venturenox.net/
+      - export DRONE_TOKEN=$VENTURENOX_DRONE_TOKEN
+      - drone secret update --name dockerconfigjson --data "$configjson" --allow-pull-request --repository venturenox/altrunic
+
+  - name: build-content
+    depends_on: [configurations]
+    environment:
+      ALTRUNIC_ECR_REPO:
+        from_secret: ecr_repo_arn
+    commands:
+      - cd backend/content
+      - sudo docker build -t alt_content:latest .
+      - sudo docker tag alt_content:latest $ALTRUNIC_ECR_REPO:content${DRONE_COMMIT:0:7}
+      - sudo docker push $ALTRUNIC_ECR_REPO:content${DRONE_COMMIT:0:7}
+      - sudo docker image rm -f $ALTRUNIC_ECR_REPO:content${DRONE_COMMIT:0:7}
