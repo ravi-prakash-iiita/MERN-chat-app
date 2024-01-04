@@ -21,7 +21,7 @@ export default function SetAvatar() {
     theme: "dark",
   };
 
-  useEffect(async () => {
+  useEffect(() => {
     if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
       navigate("/login");
   }, []);
@@ -52,18 +52,21 @@ export default function SetAvatar() {
     }
   };
 
-  useEffect(async () => {
-    const data = [];
-    for (let i = 0; i < 4; i++) {
-      const image = await axios.get(
-        `${api}/${Math.round(Math.random() * 1000)}`
-      );
-      const buffer = new Buffer(image.data);
-      data.push(buffer.toString("base64"));
+  useEffect(() => {
+    async function asyncfun() {
+      const data = [];
+      for (let i = 0; i < 4; i++) {
+        const image = await axios.get(
+          `${api}/${Math.round(Math.random() * 1000)}`
+        );
+        const buffer = new Buffer(image.data);
+        data.push(buffer.toString("base64"));
+      }
+      setAvatars(data);
+      setIsLoading(false);
     }
-    setAvatars(data);
-    setIsLoading(false);
-  }, []);
+    asyncfun()
+  }, [api]);
   return (
     <>
       {isLoading ? (
