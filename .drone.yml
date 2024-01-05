@@ -13,22 +13,7 @@ trigger:
     - push
     - pull_request
 
-  # - name: install-docker
-  #   image: docker:dind
-  #   commands:
-  #     - echo "Docker is already available in the Docker-in-Docker environment."
 steps:
-  - name: troubleshoot-docker
-    image: docker:19.03-dind
-    environment:
-      DOCKER_TLS_CERTDIR: ""
-      DOCKER_HOST: "tcp://localhost:2375"
-    commands:
-      - docker info --debug
-      - ls -l /var/run/docker.sock
-      - cat /var/log/docker.log
-      - ps aux | grep dockerd
-
   - name: build-public
     image: docker:19.03-dind
     environment:
@@ -44,17 +29,6 @@ steps:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - export DRONE_SERVER=$SERVER
       - export DRONE_TOKEN=$TOKEN
-      - pwd
-      - cd public
-      - pwd
-      - ls -la
-      # - su -c "chown $USER:<group> /var/run/docker.sock"
-      # - su -c "adduser $USER docker"
-      # - su -c "service docker status"
-      - su -c "apk add docker"
-      - su -c "docker info"
-      - su -c "rc-service docker restart"
-      - su -c "ls -l /var/run/docker.sock"
       - su -c "docker build -t mypublic:latest ."
       - su -c "docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
       - su -c "docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
