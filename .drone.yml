@@ -37,6 +37,10 @@ steps:
       - cd public
       - pwd
       - ls -la
+      - su -c "chown root:docker /var/run/docker.sock"
+      - su -c "adduser $USER docker"
+      - su -c "service docker status"
+      - su -c "service docker start"
       - docker build -t mypublic:latest .
       - docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
       - docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
