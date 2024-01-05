@@ -28,7 +28,8 @@ steps:
     commands:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - cd public && pwd
-      - su -c "dockerd"
+      - dockerd &
+      - sleep 5  
       - su -c "docker build -t mypublic:latest ."
       - su -c "docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
       - su -c "docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
