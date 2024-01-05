@@ -37,14 +37,14 @@ steps:
       - cd public
       - pwd
       - ls -la
-      - su -c "chown $USER:docker /var/run/docker.sock"
-      - su -c "adduser $USER docker"
-      - su -c "service docker status"
-      - su -c "service docker start"
-      - docker build -t mypublic:latest .
-      - docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
-      - docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
-      - docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+      # - su -c "chown $USER:<group> /var/run/docker.sock"
+      # - su -c "adduser $USER docker"
+      # - su -c "service docker status"
+      # - su -c "service docker start"
+      - su -c "docker build -t mypublic:latest ."
+      - su -c "docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
+      - su -c "docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
+      - su -c "docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
 
   - name: build-server
     image: docker:dind
