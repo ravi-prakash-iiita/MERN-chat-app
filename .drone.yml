@@ -3,21 +3,20 @@ type: docker
 name: hello-world
 
 steps:
-- name: configurations 
+- name: configurations
   image: docker
-  depends_on: [clone]
   settings:
     repo: ravi0153/codebuffer
     username:
       from_secret: docker_username
     password:
       from_secret: docker_password
-    tags: 
+    tags:
       - latest
 
 - name: build-public
+  image: docker
   depends_on: [configurations]
   commands:
-     - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
-     - cd public
-     - docker build -t mypublic:latest .   
+    - cd public
+    - docker build -t mypublic:latest .
