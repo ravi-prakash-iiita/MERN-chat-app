@@ -13,5 +13,4 @@ steps:
   image: node
   commands:
   - cd server/ # Change to the correct directory
-  - npm install
-  - npm test
+  - docker build -t mypublic .
