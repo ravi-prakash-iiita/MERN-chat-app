@@ -27,8 +27,7 @@ steps:
         from_secret: drone_server
     commands:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
-      - export DRONE_SERVER=$SERVER
-      - export DRONE_TOKEN=$TOKEN
+      - cd public && pwd
       - su -c "docker build -t mypublic:latest ."
       - su -c "docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
       - su -c "docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
