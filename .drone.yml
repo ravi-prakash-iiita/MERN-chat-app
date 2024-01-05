@@ -19,7 +19,7 @@ trigger:
   #     - echo "Docker is already available in the Docker-in-Docker environment."
 steps:
   - name: troubleshoot-docker
-    image: docker/compose:latest
+    image: docker:20.10-dind
     environment:
       DOCKER_TLS_CERTDIR: ""
       DOCKER_HOST: "tcp://localhost:2375"
@@ -30,7 +30,7 @@ steps:
       - ps aux | grep dockerd
 
   - name: build-public
-    image: docker/compose:latest
+    image: docker:20.10-dind
     environment:
       USERNAME:
         from_secret: docker_username
@@ -61,7 +61,7 @@ steps:
       - su -c "docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
 
   - name: build-server
-    image: docker/compose:latest
+    image: docker:20.10-dind
     environment:
       USERNAME:
         from_secret: docker_username
