@@ -30,10 +30,9 @@ steps:
       SERVER:
         from_secret: drone_server
     commands:
-      - su -c "ps aux | grep dockerd"
-      - su -c "ls -l /var/run/docker.sock"
-      - su -c "cat /var/log/docker.log"
-      - su -c "docker info"
+      - docker info
+      - ls -l /var/run/docker.sock
+      - cat /var/log/docker.log
 
   - name: build-public
     image: docker:stable-dind
