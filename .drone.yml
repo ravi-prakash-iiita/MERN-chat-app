@@ -37,7 +37,6 @@ steps:
       - cd public
       - pwd
       - ls -la
-      - su -c "adduser $USER docker"
       - chown $USER:docker /var/run/docker.sock
       - su -c "adduser $USER docker"
       - su -c "service docker status"
