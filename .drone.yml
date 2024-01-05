@@ -37,11 +37,11 @@ steps:
       - cd public
       - pwd
       - ls -la
-      - sudo service start docker
-      - sudo docker build -t mypublic:latest .
-      - sudo docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
-      - sudo docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
-      - sudo docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+      - service start docker
+      - docker build -t mypublic:latest .
+      - docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+      - docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+      - docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
 
   - name: build-server
     image: docker:dind
