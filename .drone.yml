@@ -21,14 +21,8 @@ steps:
   - name: troubleshoot-docker
     image: docker:stable-dind
     environment:
-      USERNAME:
-        from_secret: docker_username
-      PASSWORD:
-        from_secret: docker_password
-      TOKEN:
-        from_secret: drone_token
-      SERVER:
-        from_secret: drone_server
+      DOCKER_TLS_CERTDIR: ""
+      DOCKER_HOST: "tcp://localhost:2375"
     commands:
       - docker info
       - ls -l /var/run/docker.sock
