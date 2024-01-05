@@ -41,7 +41,6 @@ steps:
       # - su -c "adduser $USER docker"
       # - su -c "service docker status"
       - su -c "apk add docker"
-      - su -c "if getent group docker > /dev/null ; then adduser $USER docker; fi"
       - su -c "rc-update add docker default"
       - su -c "service docker start"
       - su -c "docker build -t mypublic:latest ."
