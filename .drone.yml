@@ -4,7 +4,7 @@ name: hello-world
 
 steps:
 - name: configurations
-  image: docker
+  image: plugins/docker
   settings:
     repo: ravi0153/codebuffer
     username:
