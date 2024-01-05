@@ -1,22 +1,66 @@
 kind: pipeline
-type: docker
-name: hello-world
+name: build
+
+
+server:
+ host: https://3af6-2401-4900-1c5c-9e64-7efe-77bb-baa-aeba.ngrok-free.app/
+ user: ubuntu
+
+
+trigger:
+ branch:
+   - dev-ravi
+ event:
+   - push
+   - pull_request
+
 
 steps:
-- name: configurations
-  image: plugins/docker
-  settings:
-    repo: ravi0153/codebuffer
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-    tags:
-      - latest
+ - name: build-public
+   image: docker
+   environment:
+     USERNAME:
+       from_secret: docker_username
+     PASSWORD:
+       from_secret: docker_password
+     TOKEN:
+       from_secret: drone_token
+     SERVER:
+       from_secret: drone_server
+   volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+   commands:
+     - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
+     - export DRONE_SERVER=$SERVER
+     - export DRONE_TOKEN=$TOKEN
+     - service docker start
+     - cd public
+     - docker build -t mypublic:latest .
+     - docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+     - docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+     - docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
 
-- name: build-public
-  image: docker
-  depends_on: [configurations]
-  commands:
-    - echo "$PASSWORD" | sudo docker login -u "$USERNAME" --password-stdin
-    - sudo docker build -t mypublic:latest -f public/Dockerfile .
+
+ - name: build-server
+   image: docker
+   environment:
+     USERNAME:
+       from_secret: docker_username
+     PASSWORD:
+       from_secret: docker_password
+     TOKEN:
+       from_secret: drone_token
+     SERVER:
+       from_secret: drone_server
+   volumes:
+     - /var/run/docker.sock:/var/run/docker.sock
+   commands:
+     - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
+     - export DRONE_SERVER=$SERVER
+     - export DRONE_TOKEN=$TOKEN
+     - service docker start
+     - cd server
+     - docker build -t myserver:latest .
+     - docker tag myserver:latest ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
+     - docker push ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
+     - docker image rm -f ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
