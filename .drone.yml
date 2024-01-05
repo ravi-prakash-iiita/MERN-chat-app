@@ -15,8 +15,7 @@ steps:
       - latest
 
 - name: build-public
-  image: docker
+  image: docker:dind
   depends_on: [configurations]
   commands:
-    - cd public
     - docker build -t mypublic:latest .
