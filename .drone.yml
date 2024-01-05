@@ -41,6 +41,7 @@ steps:
       # - su -c "adduser $USER docker"
       # - su -c "service docker status"
       - su -c "apk add docker"
+      - su -c "service docker restart"
       - su -c "ls -l /var/run/docker.sock"
       - su -c "docker info"
       - su -c "docker build -t mypublic:latest ."
