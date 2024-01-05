@@ -5,7 +5,7 @@ name: default
 
 trigger:
  branch:
-   - main
+   - dev-ravi
  event:
    - push
    - pull_request
