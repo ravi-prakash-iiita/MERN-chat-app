@@ -12,6 +12,6 @@ steps:
 - name: test
   image: node
   commands:
-  - cd server/Dockerfile # Change to the correct directory
+  - cd server/ # Change to the correct directory
   - npm install
   - npm test
