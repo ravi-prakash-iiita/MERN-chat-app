@@ -30,8 +30,8 @@ steps:
   - name: build-public
     depends_on: [configurations]
     environment:
-      - DRONE_SERVER=https://9ca8-2401-4900-1c5d-1394-e900-b348-f55c-f7b.ngrok-free.app 
-      - DRONE_TOKEN=$TOKEN
+      DRONE_SERVER: https://9ca8-2401-4900-1c5d-1394-e900-b348-f55c-f7b.ngrok-free.app
+      DRONE_TOKEN: from_secret: drone_token
     commands:
       - cd public
       - sudo docker build -t mypublic:latest .
@@ -42,8 +42,8 @@ steps:
   - name: build-server
     depends_on: [configurations]
     environment:
-      - DRONE_SERVER=https://9ca8-2401-4900-1c5d-1394-e900-b348-f55c-f7b.ngrok-free.app 
-      - DRONE_TOKEN=$TOKEN
+      DRONE_SERVER: https://9ca8-2401-4900-1c5d-1394-e900-b348-f55c-f7b.ngrok-free.app
+      DRONE_TOKEN: from_secret: drone_token
     commands:
       - cd server
       - sudo docker build -t myserver:latest .
