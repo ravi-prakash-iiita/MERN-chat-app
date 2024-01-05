@@ -61,4 +61,3 @@ steps:
      - docker tag myserver:latest ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
      - docker push ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
      - docker image rm -f ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
----
