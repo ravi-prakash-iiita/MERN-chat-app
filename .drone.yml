@@ -1,5 +1,5 @@
 kind: pipeline
-type: docker
+type: ssh
 name: build
 
 server:
@@ -13,11 +13,10 @@ trigger:
     - push
     - pull_request
 
-steps:
-  - name: install-docker
-    image: docker:dind
-    commands:
-      - echo "Docker is already available in the Docker-in-Docker environment."
+  # - name: install-docker
+  #   image: docker:dind
+  #   commands:
+  #     - echo "Docker is already available in the Docker-in-Docker environment."
 
   - name: build-public
     image: docker:dind
@@ -34,7 +33,11 @@ steps:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - export DRONE_SERVER=$SERVER
       - export DRONE_TOKEN=$TOKEN
+      - pwd
       - cd public
+      - pwd
+      - ls -la
+      - sudo service start docker
       - docker build -t mypublic:latest .
       - docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
       - docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
