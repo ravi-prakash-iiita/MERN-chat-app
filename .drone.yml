@@ -15,7 +15,7 @@ steps:
       - latest
 
 - name: build-public
-  image: docker:dind
+  image: docker
   depends_on: [configurations]
   commands:
     - echo "$PASSWORD" | sudo docker login -u "$USERNAME" --password-stdin
