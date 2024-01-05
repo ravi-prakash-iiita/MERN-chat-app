@@ -1,3 +1,4 @@
+---
 kind: pipeline
 type: docker
 name: build
@@ -18,7 +19,7 @@ trigger:
 
 steps:
  - name: build-public
-  #  image: docker
+   image: alpine
    environment:
      USERNAME:
        from_secret: docker_username
@@ -29,7 +30,7 @@ steps:
      SERVER:
        from_secret: drone_server
    commands:
-     - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
+     - echo "$PASSWORD" | sudo docker login -u "$USERNAME" --password-stdin
      - export DRONE_SERVER=$SERVER
      - export DRONE_TOKEN=$TOKEN
      - service docker start
@@ -41,7 +42,7 @@ steps:
 
 
  - name: build-server
-  #  image: docker
+   image: alpine
    environment:
      USERNAME:
        from_secret: docker_username
@@ -52,7 +53,7 @@ steps:
      SERVER:
        from_secret: drone_server
    commands:
-     - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
+     - echo "$PASSWORD" | sudo docker login -u "$USERNAME" --password-stdin
      - export DRONE_SERVER=$SERVER
      - export DRONE_TOKEN=$TOKEN
      - service docker start
@@ -61,3 +62,4 @@ steps:
      - docker tag myserver:latest ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
      - docker push ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
      - docker image rm -f ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
+---
