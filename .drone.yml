@@ -24,6 +24,8 @@ steps:
         from_secret: drone_token
       SERVER:
         from_secret: drone_server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     commands:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - export DRONE_SERVER=$SERVER
@@ -46,6 +48,8 @@ steps:
         from_secret: drone_token
       SERVER:
         from_secret: drone_server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     commands:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - export DRONE_SERVER=$SERVER
