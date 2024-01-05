@@ -17,11 +17,11 @@ trigger:
 
 
 steps:
-- name: install-docker
-  image: alpine
-  commands:
-    - apk --no-cache add docker
-    
+ - name: install-docker
+   image: alpine
+   commands:
+     - apk --no-cache add docker
+
  - name: build-public
    image: alpine
    environment:
