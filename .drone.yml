@@ -3,10 +3,8 @@ type: ssh
 name: build
 
 server:
-  host: 
+  host: https://3af6-2401-4900-1c5c-9e64-7efe-77bb-baa-aeba.ngrok-free.app/
   user: ubuntu
-  password:
-    from_secret: drone-runner-build-pwd
 
 trigger:
   branch:
@@ -19,33 +17,31 @@ steps:
   - name: configurations
     depends_on: [clone]
     environment:
-      ALTRUNIC_ECR_REPO:
-        from_secret: ecr_repo_arn
-      AWS_ACCESS_KEY_ID:
-        from_secret: aws_access_key
-      AWS_SECRET_ACCESS_KEY:
-        from_secret: aws_secret_key
-      VENTURENOX_DRONE_TOKEN:
-        from_secret: venturenox_drone_token
+      USERNAME:
+        from_secret: docker_username
+      PASSWORD:
+        from_secret: docker_password
+      TOKEN:
+        from_secret: drone_token
     commands:
-      - aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
-      - aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
-      - aws configure set default.region us-east-1
-      - aws ecr get-login-password --region us-east-1 | sudo docker login --username AWS --password-stdin $ALTRUNIC_ECR_REPO
-      - cd ../../../../
-      - configjson=$(sudo cat root/.docker/config.json)
-      - export DRONE_SERVER=http://drone.venturenox.net/
-      - export DRONE_TOKEN=$VENTURENOX_DRONE_TOKEN
-      - drone secret update --name dockerconfigjson --data "$configjson" --allow-pull-request --repository venturenox/altrunic
+      - sudo docker login -u $USERNAME -p $PASSWORD
+      - export DRONE_SERVER=https://9ca8-2401-4900-1c5d-1394-e900-b348-f55c-f7b.ngrok-free.app 
+      - export DRONE_TOKEN=$TOKEN
 
-  - name: build-content
+  - name: build-public
     depends_on: [configurations]
-    environment:
-      ALTRUNIC_ECR_REPO:
-        from_secret: ecr_repo_arn
     commands:
-      - cd backend/content
-      - sudo docker build -t alt_content:latest .
-      - sudo docker tag alt_content:latest $ALTRUNIC_ECR_REPO:content${DRONE_COMMIT:0:7}
-      - sudo docker push $ALTRUNIC_ECR_REPO:content${DRONE_COMMIT:0:7}
-      - sudo docker image rm -f $ALTRUNIC_ECR_REPO:content${DRONE_COMMIT:0:7}
+      - cd public
+      - sudo docker build -t mypublic:latest .
+      - sudo docker tag mypublic:latest ravi0153/codebuffer:mypublic1.0
+      - sudo docker push ravi0153/codebuffer:mypublic1.0
+      - sudo docker image rm -f ravi0153/codebuffer:mypublic1.0
+
+  - name: build-server
+    depends_on: [configurations]
+    commands:
+      - cd server
+      - sudo docker build -t myserver:latest .
+      - sudo docker tag myserver:latest ravi0153/codebuffer:myserver1.0
+      - sudo docker push ravi0153/codebuffer:myserver1.0
+      - sudo docker image rm -f ravi0153/codebuffer:myserver1.0
