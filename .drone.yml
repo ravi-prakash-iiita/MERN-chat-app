@@ -17,31 +17,41 @@ steps:
   - name: build-public
     image: docker:19.03-dind
     environment:
-      USERNAME: "$docker_username"
-      PASSWORD: "$docker_password"
-      TOKEN: "$drone_token"
-      SERVER: "$drone_server"
+      USERNAME:
+        from_secret: docker_username
+      PASSWORD:
+        from_secret: docker_password
+      TOKEN:
+        from_secret: drone_token
+      SERVER:
+        from_secret: drone_server
     commands:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - cd public && pwd
       - dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 &
-      - sleep 5  
-      - docker build -t mypublic:latest .
-      - docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
-      - docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+      - sleep 5
+      - su -c "docker build -t mypublic:latest ."
+      - su -c "docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
+      - su -c "docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
+      - su -c "docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
 
   - name: build-server
     image: docker:19.03-dind
     environment:
-      USERNAME: "$docker_username"
-      PASSWORD: "$docker_password"
-      TOKEN: "$drone_token"
-      SERVER: "$drone_server"
+      USERNAME:
+        from_secret: docker_username
+      PASSWORD:
+        from_secret: docker_password
+      TOKEN:
+        from_secret: drone_token
+      SERVER:
+        from_secret: drone_server
     commands:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
-      - export DRONE_SERVER="$SERVER"
-      - export DRONE_TOKEN="$TOKEN"
+      - export DRONE_SERVER=$SERVER
+      - export DRONE_TOKEN=$TOKEN
       - cd server
       - docker build -t myserver:latest .
       - docker tag myserver:latest ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
       - docker push ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
+      - docker image rm -f ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
