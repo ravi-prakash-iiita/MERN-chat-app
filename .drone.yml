@@ -14,7 +14,7 @@ trigger:
 
 steps:
   - name: build-public
-    image: plugins/docker
+    image: docker
     environment:
       USERNAME:
         from_secret: docker_username
@@ -35,7 +35,7 @@ steps:
       - docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
 
   - name: build-server
-    image: plugins/docker
+    image: docker
     environment:
       USERNAME:
         from_secret: docker_username
