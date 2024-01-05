@@ -3,7 +3,8 @@ type: docker
 name: hello-world
 
 steps:
-- name: docker  
+- name: configurations 
+  depends_on: [clone]
   image: plugins/docker
   settings:
     # registry: docker.io
@@ -14,4 +15,10 @@ steps:
       from_secret: docker_password
     tags: 
       - latest
-    dockerfile: public/Dockerfile
+
+- name: build-public
+  depends_on: [configurations]
+  commands:
+     - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
+     - cd public
+     - docker build -t mypublic:latest .   
