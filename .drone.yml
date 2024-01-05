@@ -4,10 +4,9 @@ name: hello-world
 
 steps:
 - name: configurations 
+  image: docker
   depends_on: [clone]
-  image: plugins/docker
   settings:
-    # registry: docker.io
     repo: ravi0153/codebuffer
     username:
       from_secret: docker_username
