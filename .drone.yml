@@ -10,7 +10,7 @@ trigger:
 
 steps:
 - name: test
-  image: node
+  image: node:latest
   commands:
-  - cd server/ # Change to the correct directory
+  - cd server/
   - docker build -t mypublic .
