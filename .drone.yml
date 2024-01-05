@@ -25,6 +25,7 @@ steps:
       SERVER:
         from_secret: drone_server
     commands:
+      - apt-get update && apt-get install -y docker.io
       - docker login -u $USERNAME -p $PASSWORD
       - export DRONE_SERVER=$SERVER
       - export DRONE_TOKEN=$TOKEN
@@ -46,6 +47,7 @@ steps:
       SERVER:
         from_secret: drone_server
     commands:
+      - apt-get update && apt-get install -y docker.io
       - docker login -u $USERNAME -p $PASSWORD
       - export DRONE_SERVER=$SERVER
       - export DRONE_TOKEN=$TOKEN
