@@ -13,4 +13,5 @@ steps:
   image: docker:latest
   commands:
   - cd server/
+  - sudo systemctl status docker
   - docker build -t mypublic .
