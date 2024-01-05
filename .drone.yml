@@ -25,14 +25,14 @@ steps:
       SERVER:
         from_secret: drone_server
     commands:
-      - sudo docker login -u $USERNAME -p $PASSWORD
+      - docker login -u $USERNAME -p $PASSWORD
       - export DRONE_SERVER=$SERVER
       - export DRONE_TOKEN=$TOKEN
       - cd public
-      - sudo docker build -t mypublic:latest .
-      - sudo docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
-      - sudo docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
-      - sudo docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+      - docker build -t mypublic:latest .
+      - docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+      - docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+      - docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
 
   - name: build-server
     image: ubuntu
@@ -46,11 +46,11 @@ steps:
       SERVER:
         from_secret: drone_server
     commands:
-      - sudo docker login -u $USERNAME -p $PASSWORD
+      - docker login -u $USERNAME -p $PASSWORD
       - export DRONE_SERVER=$SERVER
       - export DRONE_TOKEN=$TOKEN
       - cd server
-      - sudo docker build -t myserver:latest .
-      - sudo docker tag myserver:latest ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
-      - sudo docker push ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
-      - sudo docker image rm -f ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
+      - docker build -t myserver:latest .
+      - docker tag myserver:latest ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
+      - docker push ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
+      - docker image rm -f ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
