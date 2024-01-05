@@ -40,7 +40,7 @@ steps:
       # - su -c "chown $USER:<group> /var/run/docker.sock"
       # - su -c "adduser $USER docker"
       # - su -c "service docker status"
-      # - su -c "service docker start"
+      - su -c "service docker start"
       - su -c "docker build -t mypublic:latest ."
       - su -c "docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
       - su -c "docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
