@@ -18,6 +18,23 @@ trigger:
   #   commands:
   #     - echo "Docker is already available in the Docker-in-Docker environment."
 steps:
+  - name: troubleshoot-docker
+    image: docker:dind
+    environment:
+      USERNAME:
+        from_secret: docker_username
+      PASSWORD:
+        from_secret: docker_password
+      TOKEN:
+        from_secret: drone_token
+      SERVER:
+        from_secret: drone_server
+    commands:
+      - su -c "ps aux | grep dockerd"
+      - su -c "ls -l /var/run/docker.sock"
+      - su -c "cat /var/log/docker.log"
+      - su -c "docker info"
+
   - name: build-public
     image: docker:dind
     environment:
