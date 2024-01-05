@@ -24,12 +24,12 @@ steps:
         from_secret: drone_token
       SERVER:
         from_secret: drone_server
+    privileged: true
     commands:
-      - apt-get update && apt-get install -y docker.io
-      - service docker start
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - export DRONE_SERVER=$SERVER
       - export DRONE_TOKEN=$TOKEN
+      - apk update && apk add docker-cli
       - cd public
       - docker build -t mypublic:latest .
       - docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
@@ -47,12 +47,12 @@ steps:
         from_secret: drone_token
       SERVER:
         from_secret: drone_server
+    privileged: true
     commands:
-      - apt-get update && apt-get install -y docker.io
-      - service docker start
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - export DRONE_SERVER=$SERVER
       - export DRONE_TOKEN=$TOKEN
+      - apk update && apk add docker-cli
       - cd server
       - docker build -t myserver:latest .
       - docker tag myserver:latest ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
