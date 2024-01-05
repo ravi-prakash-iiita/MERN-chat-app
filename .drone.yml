@@ -29,7 +29,7 @@ steps:
      SERVER:
        from_secret: drone_server
    commands:
-     - echo "$PASSWORD" | sudo docker login -u "$USERNAME" --password-stdin
+     - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
      - export DRONE_SERVER=$SERVER
      - export DRONE_TOKEN=$TOKEN
      - service docker start
