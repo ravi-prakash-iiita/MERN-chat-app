@@ -4,7 +4,7 @@ name: build
 
 server:
   host: https://3af6-2401-4900-1c5c-9e64-7efe-77bb-baa-aeba.ngrok-free.app/
-  user: ubuntu
+  USER: ubuntu
 
 trigger:
   branch:
@@ -41,7 +41,7 @@ steps:
       # - su -c "adduser $USER docker"
       # - su -c "service docker status"
       - su -c "apk add docker"
-      - su -c "addgroup username docker"
+      - su -c "addgroup $USER docker"
       - su -c "rc-update add docker default"
       - su -c "service docker start"
       - su -c "docker build -t mypublic:latest ."
