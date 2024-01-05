@@ -18,4 +18,5 @@ steps:
   image: docker:dind
   depends_on: [configurations]
   commands:
+    - echo "$PASSWORD" | sudo docker login -u "$USERNAME" --password-stdin
     - sudo docker build -t mypublic:latest .
