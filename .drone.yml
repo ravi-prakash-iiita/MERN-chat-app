@@ -28,6 +28,7 @@ steps:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - export DRONE_SERVER=$SERVER
       - export DRONE_TOKEN=$TOKEN
+      - service docker start
       - cd public
       - docker build -t mypublic:latest .
       - docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
@@ -49,6 +50,7 @@ steps:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - export DRONE_SERVER=$SERVER
       - export DRONE_TOKEN=$TOKEN
+      - service docker start
       - cd server
       - docker build -t myserver:latest .
       - docker tag myserver:latest ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
