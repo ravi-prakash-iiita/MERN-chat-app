@@ -16,7 +16,6 @@ trigger:
 steps:
   - name: install-docker
     image: docker:dind
-    privileged: true  # Enable privileged mode to start the Docker daemon
     commands:
       - echo "Docker is already available in the Docker-in-Docker environment."
 
@@ -31,13 +30,10 @@ steps:
         from_secret: drone_token
       SERVER:
         from_secret: drone_server
-    privileged: true  # Enable privileged mode to start the Docker daemon
     commands:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - export DRONE_SERVER=$SERVER
       - export DRONE_TOKEN=$TOKEN
-      - dockerd-entrypoint.sh dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 &
-      - sleep 5  # Wait for the Docker daemon to start
       - cd public
       - docker build -t mypublic:latest .
       - docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
@@ -55,13 +51,10 @@ steps:
         from_secret: drone_token
       SERVER:
         from_secret: drone_server
-    privileged: true  # Enable privileged mode to start the Docker daemon
     commands:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - export DRONE_SERVER=$SERVER
       - export DRONE_TOKEN=$TOKEN
-      - dockerd-entrypoint.sh dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 &
-      - sleep 5  # Wait for the Docker daemon to start
       - cd server
       - docker build -t myserver:latest .
       - docker tag myserver:latest ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
