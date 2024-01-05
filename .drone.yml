@@ -18,4 +18,4 @@ steps:
   image: docker:dind
   depends_on: [configurations]
   commands:
-    - docker build -t mypublic:latest .
+    - sudo docker build -t mypublic:latest .
