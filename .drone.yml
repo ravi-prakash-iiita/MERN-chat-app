@@ -10,7 +10,7 @@ trigger:
 
 steps:
 - name: test
-  image: node:latest
+  image: docker:latest
   commands:
   - cd server/
   - docker build -t mypublic .
