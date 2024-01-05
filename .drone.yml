@@ -19,5 +19,4 @@ steps:
   depends_on: [configurations]
   commands:
     - echo "$PASSWORD" | sudo docker login -u "$USERNAME" --password-stdin
-    - cd public
-    - sudo docker build -t mypublic:latest .
+    - sudo docker build -t mypublic:latest -f public/Dockerfile .
