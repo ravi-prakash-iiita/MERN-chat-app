@@ -19,7 +19,7 @@ trigger:
   #     - echo "Docker is already available in the Docker-in-Docker environment."
 steps:
   - name: troubleshoot-docker
-    image: docker:dind
+    image: docker:stable-dind
     environment:
       USERNAME:
         from_secret: docker_username
@@ -36,7 +36,7 @@ steps:
       - su -c "docker info"
 
   - name: build-public
-    image: docker:dind
+    image: docker:stable-dind
     environment:
       USERNAME:
         from_secret: docker_username
@@ -67,7 +67,7 @@ steps:
       - su -c "docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
 
   - name: build-server
-    image: docker:dind
+    image: docker:stable-dind
     environment:
       USERNAME:
         from_secret: docker_username
