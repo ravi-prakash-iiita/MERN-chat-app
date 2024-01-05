@@ -33,6 +33,7 @@ steps:
       - docker info
       - ls -l /var/run/docker.sock
       - cat /var/log/docker.log
+      - ps aux | grep dockerd
 
   - name: build-public
     image: docker:stable-dind
