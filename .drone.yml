@@ -13,9 +13,14 @@ trigger:
     - push
     - pull_request
 
+services:
+  - name: docker
+    image: docker:19.03-dind
+    command: ["--host=unix:///var/run/docker.sock"]
+
 steps:
   - name: build-public
-    image: docker:19.03-dind
+    image: docker:19.03
     environment:
       USERNAME:
         from_secret: docker_username
@@ -28,15 +33,13 @@ steps:
     commands:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - cd public && pwd
-      - docker run --privileged -d --name mypublic-dind -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/drone/src docker:dind
-      - sleep 5  # Wait for Docker daemon to start
-      - su -c "docker build -t mypublic:latest ."
-      - su -c "docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
-      - su -c "docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
-      - su -c "docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
+      - docker build -t mypublic:latest .
+      - docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+      - docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+      - docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
 
   - name: build-server
-    image: docker:19.03-dind
+    image: docker:19.03
     environment:
       USERNAME:
         from_secret: docker_username
