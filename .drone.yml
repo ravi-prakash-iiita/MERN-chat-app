@@ -28,7 +28,7 @@ steps:
     commands:
       - echo "$PASSWORD" | docker login -u "$USERNAME" --password-stdin
       - cd public && pwd
-      - docker run -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/drone/src mypublic-build
+      - docker run --privileged -v /var/run/docker.sock:/var/run/docker.sock -v $(pwd):/drone/src mypublic-build
       - sleep 5
       - su -c "docker build -t mypublic:latest ."
       - su -c "docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}"
