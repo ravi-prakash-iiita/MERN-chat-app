@@ -30,23 +30,23 @@ steps:
   - name: build-public
     depends_on: [configurations]
     environment:
-      - DRONE_SERVER=https://9ca8-2401-4900-1c5d-1394-e900-b348-f55c-f7b.ngrok-free.app
+      - DRONE_SERVER=https://9ca8-2401-4900-1c5d-1394-e900-b348-f55c-f7b.ngrok-free.app 
       - DRONE_TOKEN=$TOKEN
     commands:
       - cd public
       - sudo docker build -t mypublic:latest .
-      - sudo docker tag mypublic:latest ravi0153/codebuffer:mypublic1.0
-      - sudo docker push ravi0153/codebuffer:mypublic1.0
-      - sudo docker image rm -f ravi0153/codebuffer:mypublic1.0
+      - sudo docker tag mypublic:latest ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+      - sudo docker push ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
+      - sudo docker image rm -f ravi0153/codebuffer:mypublic${DRONE_COMMIT:0:7}
 
   - name: build-server
     depends_on: [configurations]
     environment:
-      - DRONE_SERVER=https://9ca8-2401-4900-1c5d-1394-e900-b348-f55c-f7b.ngrok-free.app
+      - DRONE_SERVER=https://9ca8-2401-4900-1c5d-1394-e900-b348-f55c-f7b.ngrok-free.app 
       - DRONE_TOKEN=$TOKEN
     commands:
       - cd server
       - sudo docker build -t myserver:latest .
-      - sudo docker tag myserver:latest ravi0153/codebuffer:myserver1.0
-      - sudo docker push ravi0153/codebuffer:myserver1.0
-      - sudo docker image rm -f ravi0153/codebuffer:myserver1.0
+      - sudo docker tag myserver:latest ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
+      - sudo docker push ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
+      - sudo docker image rm -f ravi0153/codebuffer:myserver${DRONE_COMMIT:0:7}
