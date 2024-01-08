@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 export DRONE_GITHUB_CLIENT_ID=b6fec3ef5b76e31d08f0
-export DRONE_GITHUB_CLIENT_SECRET=e2b7134f9263294f0bf8ac4ab5f614c4d1d4e2af
+export DRONE_GITHUB_CLIENT_SECRET=c79b6a556a5d2c3c733eae7f6dca8c7884818404
 export DRONE_GITHUB_ADMIN=ravi-prakash-iiita
-export DRONE_SERVER_HOST=84a8-2401-4900-1c5d-1394-e900-b348-f55c-f7b.ngrok-free.app 
+export DRONE_SERVER_HOST=4e51-2401-4900-1f38-14e2-10b2-e373-748a-c070.ngrok-free.app
 
 export HOSTNAME=$(hostname)
 export DRONE_RPC_SECRET="$(echo ${HOSTNAME} | openssl dgst -md5 -hex)"
